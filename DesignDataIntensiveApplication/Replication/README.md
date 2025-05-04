@@ -90,3 +90,17 @@ In leader-based replication, **writes are directed to a single node (leader)**, 
 * Triggers are defined on tables to capture changes.
 * **More flexible**, allowing custom replication logic.
 * **Downside:** Adds overhead and complexity to database operations.
+
+***
+
+
+
+**Issues Caused by Replication Lag**
+
+| Problem                           | Cause                              | Solution                                           |
+| --------------------------------- | ---------------------------------- | -------------------------------------------------- |
+| Read Your Own Writes (RYOW)       | Read goes to stale follower        | Route reads/writes to leader per user              |
+| Monotonic Reads                   | Reads hit replicas at varying lags | Route user to same replica consistently            |
+| Consistent Prefix Reads           | Writes arrive out of causal order  | Write related data to same partition (if possible) |
+| General Replication Inconsistency | Async replication delay            | Use leader reads, expose only consistent APIs      |
+| Complexity for Developers         | Subtle consistency bugs            | Use transactions or well-defined guarantees        |
